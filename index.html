@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CKR Home</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
+    <!-- Styles + JS -->
+    <link rel="stylesheet" href="css/style.css?v=161225-1" />
+    <script src="js/single.js?v=161225" defer></script>
+
+    <!-- Screenshot Helper -->
+     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+</head>
+
+<body class="page-index">
+    <div class="desktop-only">
+
+    <!-- ===========================
+         HEADER / NAVIGATION
+         =========================== -->
+    <header>
+        <nav>
+            <a href="/" class="logo-link">
+                <img src="images/logo.png" alt="CKR logo">
+            </a>
+        </nav>
+    </header>
+    <!-- End navigation -->
+
+
+    <main>
+
+        <!-- ===========================
+             HERO SECTION (input + CTA)
+             =========================== -->
+        <section class="hero-section">
+            
+            <div class="wrapper">
+
+                <!-- Heading -->
+                <h1><span class="normal">ChatGPT  </span><span class="colored"> Keyword </span><span class="normal">Explorer</span></h1>
+                <h2 class="subheader">
+                    See the keywords/queries, snippets, and URLs ChatGPT pulls from the web to respond to your query; <br />
+                    plus <u>ChatGPT Citation Probability (CCP)</u><sup>i</sup> — all powered by web-search reasoning of <strong>OpenAI</strong>.
+                </h2>
+
+                <!-- Mini Navigation -->
+                <div class="mini-nav">
+                    <span class="bulk-nav-link bulk-active" data-tooltip="You're already here">Single Query</span>
+                    <span class="nav-separator">|</span>
+                    <a href="/bulk.html" class="bulk-nav-link bulk-single">Bulk Queries ⤴</a>
+                </div>
+
+                <!-- Input Box + Error + Button + Trial Counter -->
+                <div class="single-input">
+
+                    <!-- Query Input -->
+                    <div class="query-box">
+                        <input 
+                            id="queryInput"
+                            type="text"
+                            placeholder="Type/paste a query as you would in ChatGPT.  E.g. trending christmas gift 2025 |  weather in paris today"
+                        />
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="inputError" class="input-error"></div>
+
+                    <!-- Analyze Button -->
+                    <button type="button" id="actionBtnTop" class="analyze-btn action-btn">
+                        Analyze Query
+                    </button>
+
+                </div>
+                <!-- End input section -->
+
+            </div>
+        </section>
+        <!-- End hero section -->
+
+
+
+        <!-- ============================================================
+     SINGLE QUERY RESULTS SECTION
+     (hidden until analysis completes)
+     ============================================================ -->
+<section id="singleResultsSection" class="results-section" style="display:none;">
+
+            <!-- Screenshot-only branding (hidden by default) -->
+            <div class="screenshot-branding">
+            <img src="images/logo-clean.png" alt="CKR logo" />
+            <p>
+                Generated on <b>ChatGPTKeyword.com</b>. Powered by the web-search reasoning of <b>OpenAI</b>.
+            </p>
+            </div>
+
+
+    <!-- ======  RESULTS WRAPPER ====== -->
+
+        <div class="results-wrapper screenshot-target" id="resultsContainer">
+
+             <!-- ======  RESULTS Header ====== -->
+
+            <div class="results-header">
+
+                <!-- LEFT: CCP % -->
+                <div class="header-ccp-left">
+                    <span id="ccpPercent" class="ccp-percent">--<span class="percent-symbol">%</span></span>
+                </div>
+
+                <!-- MIDDLE: Explanation -->
+                <div class="header-ccp-middle">
+                    <div class="ccp-middle-top">
+                        <b>ChatGPT Citation Probability (CCP)</b><sup>*</sup> for the query
+                    </div>
+                    <div class="ccp-middle-bottom" id="ccpQueryText">
+                        “your query will appear here”
+                    </div>
+                </div>
+
+                <!-- RIGHT: Screenshot Button (hidden during capture) -->
+                <div class="header-ccp-right">
+                    <button id="screenshotBtn" class="screenshot-btn">
+                        <img src="images/screenshot.svg" alt="screenshot icon">
+                    </button>
+                </div>
+
+            </div>
+            <!-- End results header -->
+
+
+            <!-- ======  RESULTS GRID ====== -->
+
+            <div class="results-grid">
+
+                <!-- ROW 1 — QUERIES -->
+                <div class="result-row">
+                    <div class="result-label">Queries</div>
+
+                    <div class="result-cell">
+                        <div class="result-cell-inner">
+
+                            <div class="result-list-wrapper">
+                                <ol id="fanoutList" class="result-list"></ol>
+                            </div>
+
+                            <div class="result-copy-wrapper">
+                                <button class="copy-btn" data-target="fanoutList">
+                                    <img src="images/copy.svg" alt="copy">
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 2 — SNIPPETS -->
+                <div class="result-row">
+                    <div class="result-label">Snippets</div>
+
+                    <div class="result-cell">
+                        <div class="result-cell-inner">
+
+                            <div class="result-list-wrapper">
+                                <ol id="snippetsList" class="result-list"></ol>
+                            </div>
+
+                            <div class="result-copy-wrapper">
+                                <button class="copy-btn" data-target="snippetsList">
+                                    <img src="images/copy.svg" alt="copy">
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 3 — URLs -->
+                <div class="result-row">
+                    <div class="result-label">URLs</div>
+
+                    <div class="result-cell">
+                        <div class="result-cell-inner">
+
+                            <div class="result-list-wrapper">
+                                <ol id="urlsList" class="result-list"></ol>
+                            </div>
+
+                            <div class="result-copy-wrapper">
+                                <button class="copy-btn" data-target="urlsList">
+                                    <img src="images/copy.svg" alt="copy">
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End results grid -->
+
+        </div>
+        <!-- End results wrapper -->
+
+    <!-- Screenshot-only legend (hidden by default) -->
+            <div class="screenshot-legend">
+            <p>
+                <u>ChatGPT Citation Probability (CCP)</u> estimates how likely a query
+                is to trigger ChatGPT’s web search (0–100%). The higher the value, the higher the likelihood of external citations.<br/> 
+                This probability is empirical and not an official OpenAI metric.
+            </p>
+            </div>
+
+
+</section>
+<!-- End results section -->
+
+            <!-- ======   RESET BUTTON (NOT IN SCREENSHOT)  ====== -->
+
+            <div class="results-reset">
+                <button type="button" id="resetBtn" class="reset-btn" style="display: none;">
+                    Reset
+                </button>
+            </div>
+
+
+
+
+        <!-- ===========================
+             TUTORIAL SECTION
+             =========================== -->
+        <section class="tutorial-section">
+            <div class="wrapper">
+
+                <h2>How to Research Keywords for ChatGPT?</h2>
+
+                <div class="tutorial-content">
+
+                    <!-- Text bullets -->
+                    <div class="tutorial-left">
+
+                        <div class="bullet">
+                            <h3 class="pointer">1. Input</h3>
+                            <p class="description">Type/paste a (no-nonsense) query exactly as you would ask ChatGPT. Hit 'Analyze Query'.</p>
+                        </div>
+
+                        <div class="bullet">
+                            <h3 class="pointer">2. Output</h3>
+                            <p class="description">Get the keywords, fanout queries, snippets, and URLs ChatGPT pulled from the web to answer that query.</p>
+                        </div>
+
+                        <div class="bullet">
+                            <h3 class="pointer">3. Apply</h3>
+                            <p class="description">Use these insights to shape your content, meta data, & phrasing to align with how ChatGPT cites.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Video -->
+                    <div class="tutorial-right">
+                        <div class="video-container">
+                            <iframe 
+                                src="https://www.youtube.com/embed/YhKVOknFU4k?&controls=1&modestbranding=1&rel=0"
+                                title="Tutorial for ChatGPT Keyword Explorer"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- End tutorial section -->
+
+
+
+        <!-- ===========================
+             FAQ SECTION
+             =========================== -->
+        <section class="faq-section">
+            <div class="wrapper">
+
+                <h2>FAQs on Finding Keywords for ChatGPT</h2>
+
+                <div class="all-faqs">
+
+                    <details class="faq">
+                        <summary class="question">What is SEO for ChatGPT?</summary>
+                        <p class="answer">ChatGPT SEO involves optimizing content to rank in ChatGPT responses (earning citations and mentions) while also using the platform to complete SEO tasks.</p>
+                    </details>
+
+                    <details class="faq">
+                        <summary class="question">What is SEO for ChatGPT?</summary>
+                        <p class="answer">ChatGPT SEO involves optimizing content to rank in ChatGPT responses (earning citations and mentions) while also using the platform to complete SEO tasks.</p>
+                    </details>
+
+                    <details class="faq">
+                        <summary class="question">What is SEO for ChatGPT?</summary>
+                        <p class="answer">ChatGPT SEO involves optimizing content to rank in ChatGPT responses (earning citations and mentions) while also using the platform to complete SEO tasks.</p>
+                    </details>
+
+                </div>
+
+            </div>
+        </section>
+        <!-- End FAQ section -->
+
+    </main>
+    <!-- End main content -->
+
+
+
+    <!-- ===========================
+         FOOTER
+         =========================== -->
+    <footer>
+        <div class="footer-left footer-nav">
+            <a href="/">Single Query</a>
+            <a href="/bulk.html">Bulk Queries</a>
+        </div>
+
+        <div class="footer-center">
+            <a href="https://linkedin.com/in/mayankbishwas" target="_blank">
+                <img src="images/linkedin_white.svg" alt="LinkedIn" class="footer-linkedin">
+            </a>
+        </div>
+
+        <div class="footer-right">
+            <a href="https://imagealtai.com/">Image Alt AI</a>
+            <a href="/about.html">About</a>
+            <a href="mailto:mayankbishwas@gmail.com">Contact</a>
+        </div>
+    </footer>
+    <!-- End footer -->
+    </div>
+    <!-- End of desktop-only view -->
+
+
+    <!-- ===========================
+         MOBILE WARNING
+         =========================== -->
+    <div class="mobile-warning">
+        <div class="mobile-warning-box">
+            <h2>🖥️ Open on Desktop!</h2>
+            <p>Sorry, currently our web tool does not support mobile access; it works only on desktop.</p>
+            <p>But we're working on it, so do keep an eye out 🙂</p>
+            <p><u><em>P.S. Might work in landscape mode.</em></u></p>
+        </div>
+    </div>
+
+</body>
+</html>
